@@ -1,5 +1,6 @@
 const User = require("./model")
-
+require("dotenv").config()
+const jwt = require("jsonwebtoken")
 
 const  registerUser = async (req, res) => {
     try {
@@ -72,11 +73,11 @@ const  deleteUser = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-
+        const token = jwt.sign({id: req.user.id}, process.env.SECRET_KEY)
 
         res.status(200).json({
             message: "Login success",
-            user: {username: req.body.username, email: req.body.email}
+            user: {username: req.body.username, email: req.body.email, token: token}
         })
     } catch (error) {
         res.status(501).json({ errorMessage: error.message, error: error})

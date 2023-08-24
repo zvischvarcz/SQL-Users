@@ -10,5 +10,6 @@ userRouter.get("/users/all", checkToken, getAllUsers)
 userRouter.put("/users/update", emailCheck, updateUser)
 userRouter.delete("/users/delete", deleteUser)
 userRouter.post("/users/login", comparePass, login)
+userRouter.get("/users/authCheck", checkToken, login)
 
 module.exports = userRouter

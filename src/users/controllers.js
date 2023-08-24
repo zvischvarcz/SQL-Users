@@ -73,6 +73,13 @@ const  deleteUser = async (req, res) => {
 
 const login = async (req, res) => {
     try {
+        if (req.authUser) {
+            res.status(200).json({
+                message: "Success",
+                user: {username: req.authUser.username, email: req.authUser.email}
+            })  
+            return
+        }
         const token = jwt.sign({id: req.user.id}, process.env.SECRET_KEY)
 
         res.status(200).json({

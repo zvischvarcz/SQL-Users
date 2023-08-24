@@ -82,10 +82,12 @@ const checkToken = async (req, res, next) => {
     try {
         const token = req.header("Authorization")
         const decodedToken = jwt.verify(token, process.env.SECRET_KEY)
+        console.log(decodedToken)
         const user = await User.findOne({where: {id: decodedToken.id}})
         if (!user){
             throw new Error("User is not authorized")
         }
+        req.authUser = user 
         next()
     } catch (error) {
         res.status(501).json({errorMessage: error.message, error: error})

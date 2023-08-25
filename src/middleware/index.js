@@ -8,7 +8,14 @@ const saltRounds = process.env.SALT_ROUNDS
 // hash password for data safety
 const hashPass = async (req, res, next) => {
     try {
-        req.body.password = await bcrypt.hash(req.body.password, parseInt(saltRounds))
+        if (req.body.password !== undefined || req.body.key === "password") {
+            if (req.body.password !== undefined){
+                req.body.password  = await bcrypt.hash(req.body.password, parseInt(saltRounds))
+            } else {
+                req.body.value  = await bcrypt.hash(req.body.value, parseInt(saltRounds))
+            }
+            
+        }
         next()
     } catch (error) {
         res.status(501).json({errorMessage: error.message, error: error})
@@ -25,14 +32,6 @@ const comparePass = async (req, res, next) => {
         }
         
         req.user = await User.findOne({where: {username: req.body.username}})
-    //     const token = req.header("Authorization")
-    //     if (token !== undefined){
-    //         const decodedToken = jwt.verify(token, process.env.SECRET_KEY)
-    //         if (decodedToken.id === req.user.id){
-    //         next()
-    //     }
-    // }
-    //     if(token === undefined){
             const match = await bcrypt.compare(req.body.password, req.user.password)
 
             if (!match) {
@@ -41,7 +40,6 @@ const comparePass = async (req, res, next) => {
             } else {
                 next()
             }
-        // }
     } catch (error) {
         res.status(501).json({errorMessage: error.message, error: error})
     }

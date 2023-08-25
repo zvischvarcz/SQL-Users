@@ -7,7 +7,7 @@ const { registerUser, getAllUsers, updateUser, deleteUser, login } = require("./
 
 userRouter.post("/users/register", emailCheck, hashPass, registerUser)
 userRouter.get("/users/all", checkToken, getAllUsers)
-userRouter.put("/users/update", emailCheck, updateUser)
+userRouter.put("/users/update", emailCheck, hashPass, updateUser)
 userRouter.delete("/users/delete", deleteUser)
 userRouter.post("/users/login", comparePass, login)
 userRouter.get("/users/authCheck", checkToken, login)
